@@ -1,5 +1,7 @@
 {
 	"consumer_key": "YA81ymunCwWtR70RAbAoB0cI9",
 	"consumer_secret": "UHXVsekoKHfxXKF8F2XTwU1tRnBehEXdGdiagG5vmOrYwQ4XQ0",
-	"bearer_token": "AAAAAAAAAAAAAAAAAAAAAPGt%2FAAAAAAAjClTrCrCaoDcYm7qA8JO1nZRyVw%3DFiCU52eslsY38dl0Dsx8puUpXbtmck66niH16ewBWlUZ1hPzkL"
+	"bearer_token": "AAAAAAAAAAAAAAAAAAAAAPGt%2FAAAAAAAjClTrCrCaoDcYm7qA8JO1nZRyVw%3DFiCU52eslsY38dl0Dsx8puUpXbtmck66niH16ewBWlUZ1hPzkL",
+	"access_token_key": "3075441796-r4uYkCYTx8gyGL6OLkkMMCakibunl447QbDKu9n",
+	"access_token_secret": "JW8RG7yUlWbNpZuqFHQzm0v5nWkQeN8ihtf824f0cLnzV"
 }

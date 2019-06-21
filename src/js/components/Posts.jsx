@@ -1,10 +1,18 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { getData } from "../actions/index"
+import { getHillaryData } from "../actions/index"
+import { getTrumpData } from "../actions/index"
 
 export class Post extends Component {
   componentDidMount() {
-    this.props.getData()
+    // this.props.getData()
+		if (this.props.candidate === 'Hilary Clinton') {
+			this.props.getHillaryData()
+		}
+		else {
+			this.props.getTrumpData()
+		}
   }
 
   render() {
@@ -15,8 +23,9 @@ export class Post extends Component {
 				<p>Candidate: {cand}</p>
 				<ul className="list-group list-group-flush">
         {this.props.articles.map(el => (
-          <li className="list-group-item" key={el.id}>
-						<p>{el.title}</p>
+					<li className="list-group-item" key={el.id_str}>
+						<p>{el.created_at}</p>
+						<p>{el.text}</p>
           </li>
         ))}
 			</ul>
@@ -34,5 +43,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { getData }
+  { getData, getHillaryData, getTrumpData }
 )(Post)

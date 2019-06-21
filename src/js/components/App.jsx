@@ -17,7 +17,7 @@ const App = () => (
     </div>
 		
 		<div className="col-md-4 offset-md-1">
-      <h2>API posts</h2>
+      <h2>Latest tweets</h2>
       <Post />
 		</div>
 

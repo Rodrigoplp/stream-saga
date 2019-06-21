@@ -12,3 +12,11 @@ export function addArticle(payload) {
 export function getData() {
   return { type: "DATA_REQUESTED" }
 }
+
+export function getTrumpData() {
+  return { type: "DATA_TRUMP_REQUESTED" }
+}
+
+export function getHillaryData() {
+  return { type: "DATA_HILLARY_REQUESTED" }
+}

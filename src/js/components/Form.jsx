@@ -17,7 +17,7 @@ class ConnectedForm extends Component {
 
     this.state = {
 			title: '',
-			candidate: 'Hillary'
+			candidate: ''
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -25,6 +25,11 @@ class ConnectedForm extends Component {
 		this.clickTrump = this.clickTrump.bind(this)
 		this.clickHilary = this.clickHilary.bind(this)
   }
+
+	componentDidMount() {
+		this.props.setCandidate('Hillary Clinton')
+		this.setState({ candidate: 'Hillary Clinton'})
+	}
 
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value })

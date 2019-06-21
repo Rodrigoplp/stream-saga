@@ -14,11 +14,11 @@ function* workerSaga() {
 }
 
 function getData() {
-	return fetch("http://localhost:3030/api/twitter?hashtag=tesla").then(res1 =>
-		res1.json()
-	)
-
-	// return fetch("https://jsonplaceholder.typicode.com/posts").then(response =>
-	// 	response.json()
+	// return fetch("http://localhost:3030/api/twitter?hashtag=tesla").then(res1 =>
+	// 	res1.json()
 	// )
+
+	return fetch("https://jsonplaceholder.typicode.com/posts").then(response =>
+		response.json()
+	)
 }

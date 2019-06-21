@@ -8,22 +8,27 @@ export class Post extends Component {
   }
 
   render() {
+		let cand = this.props.candidate === undefined ? 'Not set' : this.props.candidate
+
 		return (
-			<ul className="list-group list-group-flush">
+			<div>
+				<p>Candidate: {cand}</p>
+				<ul className="list-group list-group-flush">
         {this.props.articles.map(el => (
-          <li className="list-group-item" key={el.id_str}>
-						<p>{el.created_at}</p>
-						<p>{el.text}</p>
+          <li className="list-group-item" key={el.id}>
+						<p>{el.title}</p>
           </li>
         ))}
-      </ul>
+			</ul>
+		</div>
 		)
   }
 }
 
 function mapStateToProps(state) {
   return {
-    articles: state.remoteArticles.slice(0, 10)
+		articles: state.remoteArticles.slice(0, 10),
+		candidate: state.candidate
   }
 }
 

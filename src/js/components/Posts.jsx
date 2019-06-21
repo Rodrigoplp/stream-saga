@@ -11,8 +11,9 @@ export class Post extends Component {
 		return (
 			<ul className="list-group list-group-flush">
         {this.props.articles.map(el => (
-          <li className="list-group-item" key={el.id}>
-            {el.title}
+          <li className="list-group-item" key={el.id_str}>
+						<p>{el.created_at}</p>
+						<p>{el.text}</p>
           </li>
         ))}
       </ul>

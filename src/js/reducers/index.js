@@ -14,7 +14,7 @@ function rootReducer(state = initialState, action) {
 
 	else if (action.type === "DATA_LOADED") {
     return Object.assign({}, state, {
-      remoteArticles: state.remoteArticles.concat(action.payload)
+      remoteArticles: state.remoteArticles.concat(action.payload.message.statuses)
     })
   }
 

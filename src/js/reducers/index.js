@@ -1,5 +1,7 @@
 import { ADD_ARTICLE } from '../constants/action-types'
 import { SET_CANDIDATE } from '../constants/action-types'
+import { DATA_LOADED } from '../constants/action-types'
+import { DATA_LOADED_TO_ADD } from '../constants/action-types'
 
 const initialState = {
 	articles: [],
@@ -20,7 +22,13 @@ function rootReducer(state = initialState, action) {
     })
 	}
 
-	else if (action.type === "DATA_LOADED") {
+	else if (action.type === DATA_LOADED) {
+    return Object.assign({}, state, {
+      remoteArticles: action.payload.message.statuses
+    })
+	}
+
+	else if (action.type === DATA_LOADED_TO_ADD) {
     return Object.assign({}, state, {
       remoteArticles: state.remoteArticles.concat(action.payload.message.statuses)
     })

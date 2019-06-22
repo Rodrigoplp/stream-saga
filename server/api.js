@@ -41,20 +41,18 @@ router.get('/twitter', (req, res) => {
 
 // MARK: - /stream
 router.get('/stream', (req, res) => {
+	res.writeHead(200, {
+		'Content-Type': 'text/plain',
+    'Transfer-Encoding': 'chunked'
+  })
+	
 	streamClient.stream('statuses/filter', {track: req.query.hashtag},  function(stream) {
 		stream.on('data', function(tweet) {
-			res.status(200).json({
-				success: true,
-				message: tweets
-			})
+			// console.log(tweet.text)
+			res.write(JSON.stringify(tweet, 0, 2))
 		})
-
 		stream.on('error', function(error) {
-			console.log('Error ' + JSON.stringify(error, 0, 2))
-			res.status(400).json({
-				success: false,
-				message: error
-			})
+			console.log(error)
 		})
 	})
 })

@@ -1,37 +1,36 @@
-import React, { Component } from "react"
+import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import { getHillaryData } from "../actions/index"
 import { getTrumpData } from "../actions/index"
 
-export class Post extends Component {
-	componentWillUpdate(nextProps, nextState) {
-		if (nextProps.candidate !== this.props.candidate) {
-			if (nextProps.candidate === 'Hillary Clinton') {
-				this.props.getHillaryData()
-			}
-			else if (nextProps.candidate === 'Donald Trump'){
-				this.props.getTrumpData()
-			}
+export function Post(props) {
+	let { articles, candidate, getHillaryData, getTrumpData } = props
+
+	// Fetch tweets when user clicks on candidate's button
+	useEffect(() => {
+		if (candidate === 'Hillary Clinton') {
+			getHillaryData()
 		}
-	}
+		else if (candidate === 'Donald Trump') {
+			getTrumpData()
+		}
+	}, [candidate, getHillaryData, getTrumpData])
 
-	render() {
-		let cand = this.props.candidate === undefined ? 'Not set' : this.props.candidate
+	let cand = candidate === undefined ? 'Not set' : candidate
 
-		return (
-			<div>
-				<p>@{cand}</p>
-				<ul className="list-group list-group-flush">
-					{this.props.articles.map(el => (
-						<li className="list-group-item" key={el.id_str}>
-							<p>{el.created_at}</p>
-							<p>{el.text}</p>
-						</li>
-					))}
-				</ul>
-			</div>
-		)
-	}
+	return (
+		<div>
+			<p>@{cand}</p>
+			<ul className="list-group list-group-flush">
+				{articles.map(el => (
+					<li className="list-group-item" key={el.id_str}>
+						<p>{el.created_at}</p>
+						<p>{el.text}</p>
+					</li>
+				))}
+			</ul>
+		</div>
+	)
 }
 
 function mapStateToProps(state) {

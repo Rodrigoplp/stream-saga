@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 // import './index.css'
 import { Provider } from 'react-redux'
-import store from './js/store/index'
-import App from './js/components/App.jsx'
+import store from './store/index'
+import App from './components/App.jsx'
 import * as serviceWorker from './serviceWorker'
-import { addArticle } from "./js/actions/index"
+import { addArticle } from "./actions/index"
 
 window.store = store
 window.addArticle = addArticle

@@ -5,7 +5,7 @@ import openSocket from 'socket.io-client'
 export default function* watcherSaga() {
 	yield all([
 		workerHillaryStream(),
-		workerTrump()
+		workerTrumpStream()
 	])
 }
 
@@ -51,16 +51,20 @@ function getTrumpData() {
 
 
 // ---------- Stream ----------------
-const socketServerURL = 'http://localhost:3030/'
+const socketServerURL = 'http://localhost:3030'
 let socket
 
+// Hillary
 function* workerHillaryStream() {
-	yield takeEvery('DATA_HILLARY_REQUESTED', listenServerSaga)
+	yield takeEvery('DATA_HILLARY_REQUESTED', listenHillarySaga)
 }
 
 // wrapping function for socket.on
-const connect = () => {
-	socket = openSocket(socketServerURL)
+const connectHillary = () => {
+	if (typeof socket !== 'undefined') {
+		socket.disconnect()
+	}
+	socket = openSocket(socketServerURL + '/hillary')
 	return new Promise((resolve) => {
 		socket.on('connect', () => {
 			resolve(socket)
@@ -80,16 +84,49 @@ const createSocketChannel = (socket, tweet)=> eventChannel((emit) => {
 });
 
 // saga that listens to the socket and puts the new data into the reducer
-const listenServerSaga = function* () {
+const listenHillarySaga = function* () {
 	// connect to the server
-	const socket = yield call(connect)
+	const socket = yield call(connectHillary)
 
 	// then create a socket channel
-	const socketChannel = yield call(createSocketChannel, socket, 'hillary')
+	const socketChannel = yield call(createSocketChannel, socket)
 
 	// then put the new data into the reducer
 	while (true) {
 		const payload = yield take(socketChannel)
-		yield put({type: 'DATA_LOADED_TO_ADD', payload})
+		yield put({type: 'DATA_LOADED_TO_HILLARY', payload})
+	}
+}
+
+// Trump
+function* workerTrumpStream() {
+	yield takeEvery('DATA_TRUMP_REQUESTED', listenTrumpSaga)
+}
+
+// wrapping function for socket.on
+const connectTrump = () => {
+	if (typeof socket !== 'undefined') {
+		socket.disconnect()
+	}
+	socket = openSocket(socketServerURL + '/trump')
+	return new Promise((resolve) => {
+		socket.on('connect', () => {
+			resolve(socket)
+		})
+	})
+}
+
+// saga that listens to the socket and puts the new data into the reducer
+const listenTrumpSaga = function* () {
+	// connect to the server
+	const socket = yield call(connectTrump)
+
+	// then create a socket channel
+	const socketChannel = yield call(createSocketChannel, socket)
+
+	// then put the new data into the reducer
+	while (true) {
+		const payload = yield take(socketChannel)
+		yield put({type: 'DATA_LOADED_TO_TRUMP', payload})
 	}
 }

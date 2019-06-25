@@ -31,19 +31,35 @@ app.use(cors())
 app.use('/api', apiRoutes)
 
 // Socket
-io.on('connection', (socket) => {
-	console.log('User connected')
+var hillary = io.of('hillary').on('connection', (socket) => {
+	console.log('User connected to Hillary')
 
 	let stream1 = streamClient.stream('statuses/filter', {track: 'Hillary%20Clinton'})
 
-	// streamClient.stream('statuses/filter', {track: 'Hillary%20Clinton'},  function(stream) {
-		stream1.on('data', function(tweet) {
-			io.emit('tweet', tweet)
-		})
-		stream1.on('error', function(error) {
-			console.log(error)
-		})
-	// })
+	stream1.on('data', function(tweet) {
+		hillary.emit('tweet', tweet)
+	})
+	stream1.on('error', function(error) {
+		console.log(error)
+	})
+
+	socket.on('disconnect', () => {
+		stream1.destroy()
+		console.log('User disconnected')
+	})
+})
+
+var trump= io.of('trump').on('connection', (socket) => {
+	console.log('User connected to Trump')
+
+	let stream1 = streamClient.stream('statuses/filter', {track: 'Donald%20Trump'})
+
+	stream1.on('data', function(tweet) {
+		trump.emit('tweet', tweet)
+	})
+	stream1.on('error', function(error) {
+		console.log(error)
+	})
 
 	socket.on('disconnect', () => {
 		stream1.destroy()

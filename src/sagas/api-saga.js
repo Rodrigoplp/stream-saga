@@ -1,4 +1,4 @@
-import { takeEvery, call, put, all, take, actionChannel } from 'redux-saga/effects'
+import { takeEvery, call, put, all, take } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import openSocket from 'socket.io-client'
 
@@ -9,52 +9,23 @@ export default function* watcherSaga() {
 	])
 }
 
-// Hillary worker
-function* workerHillary() {
-	yield takeEvery('DATA_HILLARY_REQUESTED', workerHillarySaga)
-}
-
-function* workerHillarySaga() {
-	try {
-		const payload = yield call(getHillaryData)
-		yield put({ type: 'DATA_LOADED', payload })
-	} catch (e) {
-		yield put({ type: 'API_ERRORED', payload: e })
-	}
-}
-
-function getHillaryData() {
-	return fetch('http://localhost:3030/api/twitter?hashtag=Hillary%20Clinton')
-		.then(response => response.json())
-}
-
-// Trump worker
-function* workerTrump() {
-	yield takeEvery('DATA_TRUMP_REQUESTED', workerTrumpSaga) // listenServerSaga
-}
-
-function* workerTrumpSaga() {
-	try {
-		const payload = yield call(getTrumpData)
-		yield put({ type: 'DATA_LOADED', payload })
-	} catch (e) {
-		yield put({ type: 'API_ERRORED', payload: e })
-	}
-}
-
-function getTrumpData() {
-	socket.disconnect()
-	return fetch('http://localhost:3030/api/twitter?hashtag=Donald%20Trump')
-		.then(response => response.json())
-}
-
-
-
-// ---------- Stream ----------------
 const socketServerURL = 'http://localhost:3030'
 let socket
 
-// Hillary
+// Create channel
+const createSocketChannel = (socket, tweet)=> eventChannel((emit) => {
+	const handler = (data) => {
+		emit(data)
+	}
+	socket.on('tweet', handler);
+	return () => {
+		socket.off('tweet', handler)
+	}
+})
+
+
+// ----------- Hillary ------------
+
 function* workerHillaryStream() {
 	yield takeEvery('DATA_HILLARY_REQUESTED', listenHillarySaga)
 }
@@ -72,17 +43,6 @@ const connectHillary = () => {
 	})
 }
 
-// This is how a channel is created
-const createSocketChannel = (socket, tweet)=> eventChannel((emit) => {
-	const handler = (data) => {
-		emit(data)
-	};
-	socket.on('tweet', handler);
-	return () => {
-		socket.off('tweet', handler)
-	};
-});
-
 // saga that listens to the socket and puts the new data into the reducer
 const listenHillarySaga = function* () {
 	// connect to the server
@@ -98,7 +58,8 @@ const listenHillarySaga = function* () {
 	}
 }
 
-// Trump
+// ----------- Trump ------------
+
 function* workerTrumpStream() {
 	yield takeEvery('DATA_TRUMP_REQUESTED', listenTrumpSaga)
 }

@@ -6,6 +6,7 @@ import { DATA_LOADED_TO_ADD } from '../constants/action-types'
 const initialState = {
 	articles: [],
 	remoteArticles: [],
+	remoteArticlesHillary: [],
 	candidate: ''
 }
 
@@ -23,22 +24,14 @@ function rootReducer(state = initialState, action) {
 	}
 
 	else if (action.type === DATA_LOADED) {
-		console.log('Payload: ' + action.payload)
     return Object.assign({}, state, {
       remoteArticles: action.payload.message.statuses
     })
 	}
 
 	else if (action.type === DATA_LOADED_TO_ADD) {
-		console.log('Payload: ' + action.payload)
     return Object.assign({}, state, {
-      remoteArticles: state.remoteArticles.concat(action.payload)
-    })
-  }
-
-	else if (action.type === "DATA_LOADED_TO_ADD_2") {
-    return Object.assign({}, state, {
-      remoteArticles: state.remoteArticles.concat(action.payload.message.statuses)
+      remoteArticlesHillary: state.remoteArticlesHillary.concat(action.payload)
     })
   }
 

@@ -2,7 +2,6 @@
 // MARK: Definitions
 const express			= require('express')
 const router			= express.Router()
-const https				= require('https')
 const config			= require('../config/config.json')
 var Twitter				= require('twitter')
 
@@ -10,13 +9,6 @@ let client = new Twitter({
 	consumer_key: config.consumer_key,
 	consumer_secret: config.consumer_secret,
 	bearer_token: config.bearer_token
-})
-
-let streamClient = new Twitter({
-	consumer_key: config.consumer_key,
-	consumer_secret: config.consumer_secret,
-	access_token_key: config.access_token_key,
-  access_token_secret: config.access_token_secret
 })
 
 // MARK: Routes
@@ -36,24 +28,6 @@ router.get('/twitter', (req, res) => {
 				message: error
 			})
 		}
-	})
-})
-
-// MARK: - /stream
-router.get('/stream', (req, res) => {
-	res.writeHead(200, {
-		'Content-Type': 'text/plain',
-    'Transfer-Encoding': 'chunked'
-  })
-	
-	streamClient.stream('statuses/filter', {track: req.query.hashtag},  function(stream) {
-		stream.on('data', function(tweet) {
-			// console.log(tweet.text)
-			res.write(JSON.stringify(tweet, 0, 2))
-		})
-		stream.on('error', function(error) {
-			console.log(error)
-		})
 	})
 })
 

@@ -1,9 +1,10 @@
-import { takeEvery, call, put, all/*, take*/ } from 'redux-saga/effects'
-// import { io, eventChannel } from 'redux-saga'
+import { takeEvery, call, put, all, take, actionChannel } from 'redux-saga/effects'
+import { eventChannel } from 'redux-saga'
+import openSocket from 'socket.io-client'
 
 export default function* watcherSaga() {
 	yield all([
-		workerHillary(),
+		workerHillaryStream(),
 		workerTrump()
 	])
 }
@@ -42,52 +43,53 @@ function* workerTrumpSaga() {
 }
 
 function getTrumpData() {
+	socket.disconnect()
 	return fetch('http://localhost:3030/api/twitter?hashtag=Donald%20Trump')
 		.then(response => response.json())
 }
 
 
 
-
-
 // ---------- Stream ----------------
-	/*
-const socketServerURL = 'http://localhost:3030/api/stream?hashtag=space'
-let socket;
+const socketServerURL = 'http://localhost:3030/'
+let socket
 
-wrapping function for socket.on
+function* workerHillaryStream() {
+	yield takeEvery('DATA_HILLARY_REQUESTED', listenServerSaga)
+}
+
+// wrapping function for socket.on
 const connect = () => {
-	socket = io(socketServerURL);
+	socket = openSocket(socketServerURL)
 	return new Promise((resolve) => {
 		socket.on('connect', () => {
-			resolve(socket);
-		});
-	});
-};
+			resolve(socket)
+		})
+	})
+}
 
 // This is how a channel is created
-const createSocketChannel = socket => eventChannel((emit) => {
+const createSocketChannel = (socket, tweet)=> eventChannel((emit) => {
 	const handler = (data) => {
-		emit(data);
+		emit(data)
 	};
-	socket.on('newTask', handler);
+	socket.on('tweet', handler);
 	return () => {
-		socket.off('newTask', handler);
+		socket.off('tweet', handler)
 	};
 });
 
 // saga that listens to the socket and puts the new data into the reducer
 const listenServerSaga = function* () {
 	// connect to the server
-	const socket = yield call(connect);
+	const socket = yield call(connect)
 
 	// then create a socket channel
-	const socketChannel = yield call(createSocketChannel, socket);
+	const socketChannel = yield call(createSocketChannel, socket, 'hillary')
 
 	// then put the new data into the reducer
 	while (true) {
-		const payload = yield take(socketChannel);
-		yield put({type: 'DATA_LOADED', payload});
+		const payload = yield take(socketChannel)
+		yield put({type: 'DATA_LOADED_TO_ADD', payload})
 	}
 }
-*/

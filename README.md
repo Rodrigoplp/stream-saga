@@ -2,7 +2,7 @@
 
 A React + NodeJS application that fetches tweets from Twitter stream API.
 
-State managed with redux nad Redux-Saga.
+State managed with redux and Redux-Saga.
 
 ## Requirements
 
